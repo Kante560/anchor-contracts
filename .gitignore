@@ -1,0 +1,10 @@
+# Foundry
+out/
+cache/
+broadcast/
+
+# Env — NEVER commit this
+.env
+
+# OS
+.DS_Store
