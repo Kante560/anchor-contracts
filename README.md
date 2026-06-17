@@ -2,6 +2,13 @@
 
 Smart contract repo for Anchor — trustless escrow on Base.
 
+## V2 Architecture
+
+AnchorV2 introduces a robust arbitration system for dispute resolution:
+- **Arbitrator Role:** An `immutable` arbitrator address is assigned at deployment.
+- **Disputes:** Either the Client or Freelancer can call `raiseDispute()` to freeze funds.
+- **Resolution:** The Arbitrator calls `resolveDispute()` to payout the winner and set the status to `Resolved`.
+
 ## Setup
 
 ```bash
@@ -25,10 +32,12 @@ forge coverage                     # Coverage report
 
 ## Deploy to Base Sepolia
 
+**Note:** `AnchorV2` requires an `ARBITRATOR_ADDRESS` in your `.env` file before deploying.
+
 ```bash
-cp .env.example .env               # Fill in your keys
+cp .env.example .env               # Fill in your keys (PRIVATE_KEY, BASESCAN_API_KEY, ARBITRATOR_ADDRESS)
 source .env
-forge script script/Deploy.s.sol \
+forge script script/Deploy.s.sol:DeployAnchorV2 \
   --rpc-url https://sepolia.base.org \
   --broadcast --verify \
   --etherscan-api-key $BASESCAN_API_KEY
@@ -36,10 +45,12 @@ forge script script/Deploy.s.sol \
 
 ## After Deploy
 
-Copy `out/Anchor.sol/Anchor.json` to `anchor-frontend/lib/Anchor.json`
-Copy the deployed address to `anchor-frontend/lib/contract.ts`
+Copy `out/AnchorV2.sol/AnchorV2.json` to `anchor-frontend/lib/Anchor.json`
+Copy the deployed address to your frontend's `.env.local` (`NEXT_PUBLIC_CONTRACT_ADDRESS`).
 
 ## Contract
-- **Network**: Base Mainnet / Base Sepolia
-- **Address**: `0x — TBD after deploy`
-- **Basescan**: https://sepolia.basescan.org/address/0x...
+- **Version**: V2
+- **Network**: Base Sepolia
+- **Address**: `0x2674C1B98A8c7EfAD38FdC386f87012aAa2A40ec`
+- **Arbitrator Address**: `0x5eA5849225DdDBf9d3C11DF547E3D645AA394937`
+- **Basescan**: [https://sepolia.basescan.org/address/0x2674C1B98A8c7EfAD38FdC386f87012aAa2A40ec](https://sepolia.basescan.org/address/0x2674C1B98A8c7EfAD38FdC386f87012aAa2A40ec)
